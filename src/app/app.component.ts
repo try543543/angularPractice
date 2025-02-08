@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-   this.http.get<Todo[]>('todo.json').subscribe(data=>{
+   this.http.get<Todo[]>('/api/todo2_16').subscribe(data=>{
     this.todoDataList = data;
    });
   }

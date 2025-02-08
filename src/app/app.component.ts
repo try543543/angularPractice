@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {FormsModule } from '@angular/forms';
 import { Todo, TodoClass, TodoStatusType } from './@models/todo.model';
-
+import { HttpClient, HttpClientModule } from '@angular/common/http'; //只能用在NgModule
+//import { provideHttpClient } from '@angular/common/http'; //獨立組件 (Standalone Components) 使用方式
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import { Todo, TodoClass, TodoStatusType } from './@models/todo.model';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'TODO';
   placeholder = 'What needs to be done!???'
   toggleAllBtn = false;
@@ -25,22 +26,16 @@ export class AppComponent {
   check2 = false;
   check3 = false;
 
-  todoDataList:Todo[] = [
-    {
-      Status: true,
-      Thing: '第一件事情',
-      Editing: false
-    },{
-      Status: false,
-      Thing: '第二件事情',
-      Editing: false
-    },{
-      Status: false,
-      Thing: '第三件事情',
-      Editing: false
-    },
-  ];
+  todoDataList:Todo[] = [];
 
+  constructor(private http: HttpClient) { }
+
+  ngOnInit(): void {
+   this.http.get<Todo[]>('todo.json').subscribe(data=>{
+    this.todoDataList = data;
+   });
+  }
+;
 
   toggleAll() {
     console.log('toggleAll clicked');

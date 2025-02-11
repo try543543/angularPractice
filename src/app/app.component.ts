@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
     this.todoDataList = data;
    });
   }
-;
+
 
   toggleAll() {
     console.log('toggleAll clicked');
@@ -58,13 +58,31 @@ export class AppComponent implements OnInit {
      this.todoDataList=this.todoDataList.filter(data=>data!== todo);
 
 }
+
+getData() {
+  this.http.get<Todo[]>('/api/todo2_16').subscribe(data=>{
+   this.todoDataList = data;
+   console.log(this.todoDataList);
+  });
+ }
+
   add(){
     const todo: Todo = {
       Status: false,
       Thing:  this.todoInputModel,
       Editing: false
     }
-      this.todoDataList.push(todo);
+     // this.http.post('/api/todo2_16',todo).subscribe(()=>{
+     //   this.getData();
+     // }) 簡單粗暴 寫入資料庫再讀取 第一種
+
+       this.http.post<Todo>('/api/todo2_16',todo).subscribe(data =>{
+        this.todoDataList.push(data);
+        console.log(this.todoDataList);
+      }) // 用push 第二種直接將資料庫寫入的值吐回前端
+
+      //this.todoDataList.push(todo);
+      
       this.todoInputModel = ' ';
    }
    edit(item: Todo){

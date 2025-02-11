@@ -70,7 +70,8 @@ getData() {
     const todo: Todo = {
       Status: false,
       Thing:  this.todoInputModel,
-      Editing: false
+      Editing: false,
+      TodoId :''
     }
      // this.http.post('/api/todo2_16',todo).subscribe(()=>{
      //   this.getData();
@@ -89,8 +90,9 @@ getData() {
     item.Editing = true;
    }
   
-   update(item: Todo, value: string){
-    item.Thing = value;
+   update(item: Todo,){ //value: string有ngmodel 就不需要
+   // item.Thing = value;  有ngmodel 就不需要
+   this.http.put('/api/todo2_16/' + item.TodoId, item).subscribe();
     item.Editing = false;
    }
 

@@ -21,11 +21,11 @@
                     <label (dblclick)="edit(item)">{{item.Thing}}</label>
                     <button (click)="delete(item)" class="destroy"></button>
                 </div>
-                <input  (blur)="item.Editing = false"
+                <input  (blur)="update(item)"
                         (mouseenter)="itemInput.focus()"
                         #itemInput 
                         [(ngModel)]="item.Thing"
-                        (keyup.enter)="item.Editing = false" 
+                        (keyup.enter)="update(item)" 
                         *ngIf="item.Editing" 
                         [value]="item.Thing"  
                         class="edit"/>

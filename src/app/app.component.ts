@@ -39,14 +39,22 @@ export class AppComponent implements OnInit {
 
   toggleAll() {
     console.log('toggleAll clicked');
-    this.toggleAllBtn = ! this.toggleAllBtn;
+    this.toggleAllBtn = !this.toggleAllBtn;
     this.todoDataList.forEach(data =>{
       data.Status = this.toggleAllBtn;
     });
+
+    this.http.put('/api/todo2_16/Status/' + this.toggleAllBtn, null).subscribe();
   }
 
   clickCheck(item: Todo){
     item.Status = !item.Status;
+
+    this.http.put('/api/todo2_16/' + item.TodoId, item).subscribe();
+    this.checkToggleAllBtn();
+  }
+
+  checkToggleAllBtn(){
     if(this.todoCompleted.length === this.todoDataList.length){
       this.toggleAllBtn = true;
     } else {
@@ -54,8 +62,9 @@ export class AppComponent implements OnInit {
     }
   }
 
-  delete(todo: Todo){
-     this.todoDataList=this.todoDataList.filter(data=>data!== todo);
+  delete(item: Todo){
+     this.http.delete('/api/todo2_16/' + item.TodoId).subscribe();
+     this.todoDataList=this.todoDataList.filter(data=>data!== item);//不會被留下來
 
 }
 
@@ -125,6 +134,21 @@ getData() {
      }
 
      clearCompleted(){
+      // this.todoDataList.forEach(data => {  第一種土法煉鋼
+      //   if (data.Status) {
+      //     this.http.delete('/api/todo2_16/' + data.TodoId).subscribe();
+      //   }
+      // });
+      // this.todoDataList = this.todoActive;
+      //let idList = ''; //第二種支援多筆傳多個id到後端
+      // this.todoDataList.forEach(data => {
+      //   if (data.Status) {
+      //    idList = idList + ',' + data.TodoId;
+      //  }
+      //  });
+      //    this.http.delete('/api/todo2_16/' + idList).subscribe(); //idList id格式
+      //   this.todoDataList = this.todoActive;
+      this.http.delete('/api/todo2_16/clearCompleted').subscribe(); //第3種用後端寫好的api
       this.todoDataList = this.todoActive;
      }
    
